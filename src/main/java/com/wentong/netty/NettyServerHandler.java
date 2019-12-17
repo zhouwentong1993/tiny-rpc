@@ -22,7 +22,8 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
 
             Method method = findMethod(classStructure, aClass);
             Object invoke = method.invoke(o, classStructure.getParam());
-            ctx.writeAndFlush(invoke);
+            System.out.println(invoke);
+//            ctx.writeAndFlush("test");
         }
     }
 

@@ -2,12 +2,11 @@ package com.wentong.netty;
 
 import com.wentong.utils.Util;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import static com.wentong.common.CommonValue.REQUEST_HEAD;
 
@@ -53,18 +52,24 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
 
     @Override
     public Object call() {
-        System.out.println("客户端发送消息");
-        ByteBuf buffer = Unpooled.buffer();
-        buffer.writeBytes("hello".getBytes());
-        synchronized (this) {
-            while (StringUtils.isEmpty(result)) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        try {
+            TimeUnit.SECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return result;
+        return null;
+//        System.out.println("客户端发送消息");
+//        ByteBuf buffer = Unpooled.buffer();
+//        buffer.writeBytes("hello".getBytes());
+//        synchronized (this) {
+//            while (StringUtils.isEmpty(result)) {
+//                try {
+//                    wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return result;
     }
 }
