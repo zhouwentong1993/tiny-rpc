@@ -22,12 +22,12 @@ public class NettyClient {
     private NettyClientHandler nettyClientHandler;
 
     public <T> T getBean(Class<T> clazz, String host, int port) {
-        return Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, (proxy, method, args) -> {
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, (proxy, method, args) -> {
             if (nettyClientHandler == null) {
                 init(host, port);
             }
             nettyClientHandler.setParam("");
-            SERVICE.submit(nettyClientHandler).get();
+            return (SERVICE.submit(nettyClientHandler).get());
         });
     }
 
