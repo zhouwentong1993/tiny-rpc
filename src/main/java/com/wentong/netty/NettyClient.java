@@ -15,6 +15,8 @@ import java.lang.reflect.Proxy;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.wentong.common.CommonValue.REQUEST_HEAD;
+
 public class NettyClient {
 
     private static final ExecutorService SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -23,11 +25,16 @@ public class NettyClient {
 
     public <T> T getBean(Class<T> clazz, String host, int port) {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, (proxy, method, args) -> {
-            if (nettyClientHandler == null) {
-                init(host, port);
+            try {
+
+                if (nettyClientHandler == null) {
+                    init(host, port);
+                }
+                nettyClientHandler.setParam(REQUEST_HEAD + "#HelloService#hello#" + args[0]);
+                return (SERVICE.submit(nettyClientHandler).get());
+            } catch (Exception e) {
+                throw e.getCause();
             }
-            nettyClientHandler.setParam("");
-            return (SERVICE.submit(nettyClientHandler).get());
         });
     }
 
@@ -43,11 +50,11 @@ public class NettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new NettyClientHandler()).addLast(new StringDecoder()).addLast(new StringEncoder());
+                            socketChannel.pipeline().addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(nettyClientHandler);
                         }
                     });
             ChannelFuture sync = bootstrap.connect(host, port).sync();
-            sync.channel().closeFuture().sync();
+//            sync.channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();
         }

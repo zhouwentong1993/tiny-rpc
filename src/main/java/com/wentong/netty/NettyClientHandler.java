@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.Callable;
 
+import static com.wentong.common.CommonValue.REQUEST_HEAD;
+
 public class NettyClientHandler extends ChannelHandlerAdapter implements Callable<Object> {
 
     // 执行方法传递的参数
@@ -19,11 +21,13 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
     private ChannelHandlerContext context;
 
     public void setParam(String param) {
+        System.out.println("NettyClientHandler.setParam");
         this.param = param;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("NettyClientHandler.channelRead");
         String s = Util.readByteBufIntoString((ByteBuf) msg);
         result = s;
         synchronized (this) {
@@ -35,23 +39,30 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("NettyClientHandler.channelActive");
+        ctx.writeAndFlush(REQUEST_HEAD + "#com.wentong.provider.HelloServiceImpl#sayHello#aaa");
         context = ctx;
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        System.out.println("NettyClientHandler.exceptionCaught + "+ cause);
+
         ctx.close();
     }
 
     @Override
-    public Object call() throws Exception {
+    public Object call() {
         System.out.println("客户端发送消息");
-        ByteBuf buffer = Unpooled.buffer(param.getBytes().length);
+        ByteBuf buffer = Unpooled.buffer();
         buffer.writeBytes("hello".getBytes());
-        context.writeAndFlush(buffer);
         synchronized (this) {
             while (StringUtils.isEmpty(result)) {
-                wait();
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return result;
