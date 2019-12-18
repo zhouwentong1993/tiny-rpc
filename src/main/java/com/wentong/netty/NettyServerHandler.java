@@ -16,7 +16,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("NettyServerHandler.channelRead");
         String message = (String) msg;
         System.out.println("收到请求：" + message);
-                    ctx.writeAndFlush("test");
         if (StringUtils.isNotBlank(message) && message.startsWith(CommonValue.REQUEST_HEAD)) {
             ClassStructure classStructure = Util.parseMessage(message);
             Class<?> aClass = Class.forName(classStructure.getClassName());
@@ -25,6 +24,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             Method method = findMethod(classStructure, aClass);
             Object invoke = method.invoke(o, classStructure.getParam());
             System.out.println(invoke);
+            ctx.writeAndFlush(invoke);
+
         }
     }
 
