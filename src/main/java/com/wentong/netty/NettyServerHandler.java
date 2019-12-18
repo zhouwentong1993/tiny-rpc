@@ -3,18 +3,20 @@ package com.wentong.netty;
 import com.wentong.common.ClassStructure;
 import com.wentong.common.CommonValue;
 import com.wentong.utils.Util;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;
 
-public class NettyServerHandler extends ChannelHandlerAdapter {
+public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("NettyServerHandler.channelRead");
         String message = (String) msg;
         System.out.println("收到请求：" + message);
+                    ctx.writeAndFlush("test");
         if (StringUtils.isNotBlank(message) && message.startsWith(CommonValue.REQUEST_HEAD)) {
             ClassStructure classStructure = Util.parseMessage(message);
             Class<?> aClass = Class.forName(classStructure.getClassName());
@@ -23,7 +25,6 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
             Method method = findMethod(classStructure, aClass);
             Object invoke = method.invoke(o, classStructure.getParam());
             System.out.println(invoke);
-//            ctx.writeAndFlush("test");
         }
     }
 
@@ -45,6 +46,12 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         System.out.println("NettyServerHandler.channelReadComplete");
+    }
+
+    @Override
+    public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+        System.out.println("NettyServerHandler.close");
+        super.close(ctx, promise);
     }
 
     @Override

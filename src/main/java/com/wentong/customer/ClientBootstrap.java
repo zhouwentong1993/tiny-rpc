@@ -7,8 +7,9 @@ public class ClientBootstrap {
 
     public static void main(String[] args) {
         NettyClient nettyClient = new NettyClient();
-        HelloService service = nettyClient.getBean(HelloService.class, "127.0.0.1", 8000);
-        service.sayHello("你好");
+        nettyClient.init("127.0.0.1", 8001);
+//        HelloService service = nettyClient.getBean(HelloService.class, "127.0.0.1", 8001);
+//        service.sayHello("你好");
     }
 
 }
