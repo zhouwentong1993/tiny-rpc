@@ -3,14 +3,14 @@ package com.wentong.netty;
 import com.wentong.common.ClassStructure;
 import com.wentong.common.CommonValue;
 import com.wentong.utils.Util;
+import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;
 
-public class NettyServerHandler extends ChannelInboundHandlerAdapter {
+public class NettyServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("NettyServerHandler.channelRead");

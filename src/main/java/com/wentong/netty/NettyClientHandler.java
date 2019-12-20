@@ -1,7 +1,7 @@
 package com.wentong.netty;
 
+import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import org.apache.commons.lang.StringUtils;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 
 import static com.wentong.common.CommonValue.REQUEST_HEAD;
 
-public class NettyClientHandler extends ChannelInboundHandlerAdapter implements Callable<Object> {
+public class NettyClientHandler extends ChannelHandlerAdapter implements Callable<Object> {
 
     // 执行方法传递的参数
     private String param;
