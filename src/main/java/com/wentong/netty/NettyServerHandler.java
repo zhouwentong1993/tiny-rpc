@@ -1,30 +1,36 @@
 package com.wentong.netty;
 
+import com.wentong.codec.Request;
+import com.wentong.codec.Response;
 import com.wentong.common.ClassStructure;
+import com.wentong.common.CommonValue;
+import com.wentong.utils.Util;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;
 
 public class NettyServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("NettyServerHandler.channelRead");
-
-//        String message = (String) msg;
+        Response response = (Response) msg;
         System.out.println("收到请求：" + msg);
-//        if (StringUtils.isNotBlank(message) && message.startsWith(CommonValue.REQUEST_HEAD)) {
-//            ClassStructure classStructure = Util.parseMessage(message);
-//            Class<?> aClass = Class.forName(classStructure.getClassName());
-//            Object o = aClass.newInstance();
-//
-//            Method method = findMethod(classStructure, aClass);
-//            Object invoke = method.invoke(o, classStructure.getParam());
-//            System.out.println(invoke);
-//            ctx.writeAndFlush(invoke);
-//
-//        }
+
+        if (StringUtils.isNotBlank(response.getPayload()) && response.getPayload().startsWith(CommonValue.REQUEST_HEAD)) {
+            ClassStructure classStructure = Util.parseMessage(response.getPayload());
+            Class<?> aClass = Class.forName(classStructure.getClassName());
+            Object o = aClass.newInstance();
+
+            Method method = findMethod(classStructure, aClass);
+            Object invoke = method.invoke(o, classStructure.getParam());
+            Request request = new Request();
+            request.setType("type");
+            request.setRequestId("requestId");
+            request.setPayload(invoke.toString());
+            ctx.writeAndFlush(request);
+        }
     }
 
     private Method findMethod(ClassStructure classStructure, Class<?> aClass) {

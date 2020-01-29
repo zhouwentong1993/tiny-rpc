@@ -37,7 +37,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("NettyClientHandler.channelActive");
         Request request = new Request();
-        request.setPayload("payload");
+        request.setPayload(REQUEST_HEAD + "#com.wentong.provider.HelloServiceImpl#sayHello#aaa");
         request.setRequestId("requestId");
         request.setType("type");
         ctx.writeAndFlush(request);

@@ -9,3 +9,7 @@
   - [ ] XML
   - [ ] JBoss Marshalling
 - [ ] 增加探活，参见 Netty pro
+- [ ] 增加限流功能
+  - [ ] 基于时间窗口的限流
+  - [ ] 基于信号量的限流
+  - [ ] 基于 LimitLatch 的限流
