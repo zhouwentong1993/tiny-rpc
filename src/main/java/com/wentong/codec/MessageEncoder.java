@@ -11,6 +11,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class MessageEncoder extends MessageToByteEncoder<Request> {
     @Override
     protected void encode(ChannelHandlerContext ctx, Request msg, ByteBuf out) throws Exception {
+        // 按照顺序编码，在 Decoder 里就要按照这个顺序解码
         write(msg.getType(), out);
         write(msg.getRequestId(), out);
         write(msg.getPayload(), out);

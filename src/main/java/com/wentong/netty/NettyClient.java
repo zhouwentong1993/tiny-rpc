@@ -1,5 +1,7 @@
 package com.wentong.netty;
 
+import com.wentong.codec.MessageDecoder;
+import com.wentong.codec.MessageEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -7,8 +9,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
 import java.lang.reflect.Proxy;
 import java.util.concurrent.ExecutorService;
@@ -49,7 +49,10 @@ public class NettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(new NettyClientHandler());
+                            socketChannel.pipeline()
+                                    .addLast(new MessageDecoder())
+                                    .addLast(new MessageEncoder())
+                                    .addLast(new NettyClientHandler());
                         }
                     });
             ChannelFuture sync = bootstrap.connect(host, port).sync();

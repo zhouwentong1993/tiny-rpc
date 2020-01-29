@@ -1,9 +1,10 @@
 package com.wentong.netty;
 
+import com.wentong.codec.Request;
+import com.wentong.codec.Response;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.Callable;
 
@@ -14,7 +15,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
     // 执行方法传递的参数
     private String param;
     // 执行方法返回结果
-    private String result;
+    private Response result;
     // 上下文对象，在 Channel 建立连接时初始化
     private ChannelHandlerContext context;
 
@@ -26,7 +27,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
     @Override
     public synchronized void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("NettyClientHandler.channelRead");
-        result = (String) msg;
+        result = (Response) msg;
         notifyAll();
         System.out.println("response:[" + result + "]");
     }
@@ -34,8 +35,12 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("NettyClientHandler.channelActive111");
-        ctx.writeAndFlush(REQUEST_HEAD + "#com.wentong.provider.HelloServiceImpl#sayHello#aaa");
+        System.out.println("NettyClientHandler.channelActive");
+        Request request = new Request();
+        request.setPayload("payload");
+        request.setRequestId("requestId");
+        request.setType("type");
+        ctx.writeAndFlush(request);
         context = ctx;
     }
 
@@ -55,7 +60,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter implements Callabl
         System.out.println("客户端发送消息");
         context.writeAndFlush(param);
         synchronized (this) {
-            while (StringUtils.isEmpty(result)) {
+            while (result != null) {
                 try {
                     wait();
                 } catch (InterruptedException e) {

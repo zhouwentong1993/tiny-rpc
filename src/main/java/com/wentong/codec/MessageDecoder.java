@@ -18,18 +18,20 @@ import java.util.List;
 public class MessageDecoder extends ByteToMessageDecoder{
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (in.readableBytes() >= 0 && in.readableBytes() >= 100000) {
-            readSomething(in, out);
-            readSomething(in, out);
-            readSomething(in, out);
+        if (in.readableBytes() >= 0 && in.readableBytes() <= 100000) {
+            Response response = new Response();
+            response.setType(readSomething(in));
+            response.setRequestId(readSomething(in));
+            response.setPayload(readSomething(in));
+            out.add(response);
         } else {
             throw new TooLongFrameException("Frame too big!");
         }
     }
 
-    private void readSomething(ByteBuf in, List<Object> out) {
+    private String readSomething(ByteBuf in) {
         int size = in.readInt();
         ByteBuf buf = in.readBytes(size);
-        out.add(new String(buf.array()));
+        return new String(buf.array());
     }
 }

@@ -1,12 +1,9 @@
 package com.wentong.netty;
 
 import com.wentong.common.ClassStructure;
-import com.wentong.common.CommonValue;
-import com.wentong.utils.Util;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -14,19 +11,20 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("NettyServerHandler.channelRead");
-        String message = (String) msg;
-        System.out.println("收到请求：" + message);
-        if (StringUtils.isNotBlank(message) && message.startsWith(CommonValue.REQUEST_HEAD)) {
-            ClassStructure classStructure = Util.parseMessage(message);
-            Class<?> aClass = Class.forName(classStructure.getClassName());
-            Object o = aClass.newInstance();
 
-            Method method = findMethod(classStructure, aClass);
-            Object invoke = method.invoke(o, classStructure.getParam());
-            System.out.println(invoke);
-            ctx.writeAndFlush(invoke);
-
-        }
+//        String message = (String) msg;
+        System.out.println("收到请求：" + msg);
+//        if (StringUtils.isNotBlank(message) && message.startsWith(CommonValue.REQUEST_HEAD)) {
+//            ClassStructure classStructure = Util.parseMessage(message);
+//            Class<?> aClass = Class.forName(classStructure.getClassName());
+//            Object o = aClass.newInstance();
+//
+//            Method method = findMethod(classStructure, aClass);
+//            Object invoke = method.invoke(o, classStructure.getParam());
+//            System.out.println(invoke);
+//            ctx.writeAndFlush(invoke);
+//
+//        }
     }
 
     private Method findMethod(ClassStructure classStructure, Class<?> aClass) {
