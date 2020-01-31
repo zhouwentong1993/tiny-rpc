@@ -6,9 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tiny-rpc" />
+        <module name="client" />
+        <module name="hello-service-api" />
+        <module name="rpc-api" />
+        <module name="rpc-netty" />
+        <module name="server" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="simple-rpc" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

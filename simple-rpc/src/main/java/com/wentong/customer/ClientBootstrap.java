@@ -1,7 +1,6 @@
 package com.wentong.customer;
 
 import com.wentong.netty.NettyClient;
-import com.wentong.socketrpc.HelloService;
 
 public class ClientBootstrap {
 
