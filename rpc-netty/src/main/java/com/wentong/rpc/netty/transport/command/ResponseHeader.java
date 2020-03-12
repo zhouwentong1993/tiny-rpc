@@ -2,6 +2,10 @@ package com.wentong.rpc.netty.transport.command;
 
 public class ResponseHeader extends Header {
 
+    public ResponseHeader(int requestId, int version, int type) {
+        super(requestId, version, type);
+    }
+
     private int code;
     private String message;
 

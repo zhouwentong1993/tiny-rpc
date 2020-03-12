@@ -8,6 +8,12 @@ public class Header {
     // 标识请求类型
     private int type;
 
+    public Header(int requestId, int version, int type) {
+        this.requestId = requestId;
+        this.version = version;
+        this.type = type;
+    }
+
     public int getRequestId() {
         return requestId;
     }
