@@ -1,0 +1,19 @@
+package com.wentong.rpc.netty.client.stubs;
+
+import com.wentong.rpc.netty.serialize.SerializeSupport;
+
+public class stubTemplate extends AbstractStub implements %s {
+
+    @Override
+    public String test(String param) {
+        return SerializeSupport.parse(
+                invokeRemote(
+                    new RpcRequest(
+                            % s,
+                            % s,
+                    SerializeSupport.serialize(param)
+                    )
+                )
+        );
+    }
+}
