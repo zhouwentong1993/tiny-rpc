@@ -1,11 +1,22 @@
 package com.wentong.rpc;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * 注册中心
  */
 public interface NamingService {
+
+    /**
+     * 支持的所有协议
+     */
+    List<String> supportedProtocol();
+
+    /**
+     * 连接到注册中心
+     */
+    void connect(URI nameServiceURI);
 
     /**
      * 服务注册接口，提供给服务端调用

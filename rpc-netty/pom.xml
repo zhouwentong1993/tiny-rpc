@@ -18,6 +18,17 @@
             <artifactId>compiler</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.wentong</groupId>
+            <artifactId>rpc-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.2-jre</version>
+        </dependency>
 
     </dependencies>
 </project>

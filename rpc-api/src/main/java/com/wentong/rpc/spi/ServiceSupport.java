@@ -18,7 +18,7 @@ public class ServiceSupport {
 
     private ServiceSupport(){}
 
-    private static final Map<String, Object> singletonMap = new HashMap<>();
+    private static final Map<String, Object> SINGLETON_MAP = new HashMap<>();
 
     public static synchronized <S> List<S> loadAll(@NotNull Class<S> clazz) {
         return StreamSupport.stream(ServiceLoader.load(clazz).spliterator(), false)
@@ -33,7 +33,7 @@ public class ServiceSupport {
     private static <S> S singletonFilter(@NotNull S service) {
         if (service.getClass().isAnnotationPresent(Singleton.class)) {
             String canonicalName = service.getClass().getCanonicalName();
-            return (S) singletonMap.putIfAbsent(canonicalName, service);
+            return (S) SINGLETON_MAP.putIfAbsent(canonicalName, service);
         } else {
             return service;
         }
