@@ -32,15 +32,16 @@
             <version>2.6</version>
         </dependency>
         <dependency>
-            <groupId>com.itranswarp</groupId>
-            <artifactId>compiler</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>13.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
